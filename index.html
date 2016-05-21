@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			dl{border-bottom: 1px dashed #000;}
+			dt{font-weight: bold;}
+		</style>
+	</head>
+	<body>
+		<img src="3.png" alt="" />
+		<input type="text"  id="p" placeholder="书籍 电影 音乐 其他"/>
+		<input type="button" id="btn" value="搜索" />
+		<p id="messege"></p>
+		<hr />
+		<div id="box"></div>
+		<script type="text/javascript">
+			function fn(data){
+				var oMsg = document.getElementById("messege");
+				var oBox = document.getElementById("box");
+				oMsg.innerHTML = data.title.$t +':' +data['opensearch:totalResults'].$t;
+				var aEntry = data.entry;
+				var html = '';
+				for (var i = 0; i < aEntry.length; i++) {
+					html += '<dl><dd>'+aEntry[i].title.$t+'</dd><dt><img src="'+aEntry[i].link[2]['@href']+'"/></dt></dl>'
+				}
+				oBox.innerHTML = html;
+			}
+			var oMsg = document.getElementById("messege");
+			var oBox = document.getElementById("box");
+			var oP = document.getElementById("p");
+			var oBtn = document.getElementById("btn");
+			
+			oBtn.onclick = function(){
+				if(oP.value != ''){
+					var oScript = document.createElement('script');
+					oScript.src = 'http://api.douban.com/book/subjects?q='+oP.value+'&alt=xd&callback=fn';
+					document.body.appendChild(oScript);
+				}
+			}
+		</script>
+	</body>
+</html>
+
