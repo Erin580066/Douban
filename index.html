@@ -6,6 +6,11 @@
 		<style type="text/css">
 			dl{border-bottom: 1px dashed #000;}
 			dt{font-weight: bold;}
+			a {
+	            font-size: 40px;
+	            margin: 10px;
+	        }
+	       
 		</style>
 	</head>
 	<body>
@@ -15,15 +20,16 @@
 		<p id="messege"></p>
 		<hr />
 		<div id="box"></div>
+		<div id="box1"></div>
 		<script type="text/javascript">
 			function fn(data){
 				var oMsg = document.getElementById("messege");
 				var oBox = document.getElementById("box");
-				oMsg.innerHTML = data.title.$t +':' +data['opensearch:totalResults'].$t;
-				var aEntry = data.entry;
+				var aEntry = data.books;
+				var hash = window.location.hash.split("=")[1]||1;
 				var html = '';
 				for (var i = 0; i < aEntry.length; i++) {
-					html += '<dl><dd>'+aEntry[i].title.$t+'</dd><dt><img src="'+aEntry[i].link[2]['@href']+'"/></dt></dl>'
+					html += '<dl><dd>'+aEntry[i].title+'</dd><dt><img src="'+aEntry[i].image+'"/></dt></dl>'
 				}
 				oBox.innerHTML = html;
 			}
@@ -31,14 +37,50 @@
 			var oBox = document.getElementById("box");
 			var oP = document.getElementById("p");
 			var oBtn = document.getElementById("btn");
-			
+			window.onhashchange = function(){
+				CreateTag();
+			}
 			oBtn.onclick = function(){
+				CreateTag();
+			}
+			function CreateTag(){
+				hash = window.location.hash.split("=")[1];
 				if(oP.value != ''){
 					var oScript = document.createElement('script');
-					oScript.src = 'http://api.douban.com/book/subjects?q='+oP.value+'&alt=xd&callback=fn';
+					oScript.src = 'https://api.douban.com/v2/book/search?q='+oP.value+'&callback=fn&start='+(hash-1)*10+1;
 					document.body.appendChild(oScript);
 				}
 			}
+			var pages = 10; //总页数
+	        var page = 1;//当前页
+	        var prepage = 5;//每页最多显示条数
+			var oBox1 = document.getElementById("box1");
+			showPage(oBox1);
+	        function showPage(ele) {
+	            var start = 0;//起始页
+	            var end = 0;//结束数字
+	            var n = 0;//少算的偏移量
+	            var offset = Math.floor(prepage / 2);//偏移量
+	            start = page - offset;
+	            if (start < 1) {
+	                start = 1;
+	                n = start - (page - offset);
+	            }
+	            end = page + offset + n;
+	            if (end > pages) {
+	                end = pages;
+	                start = end - prepage + 1;
+	                start = start > 0 ? start : 1;
+	            }
+	            console.log(start, end);
+	            ele.innerHTML = '';
+	            for (var i=start; i<=end; i++) {
+	                var a = document.createElement('a');
+	                a.innerHTML = i;
+	                a.href = '#page='+i;
+	                ele.appendChild(a);
+	            }
+	        }
 		</script>
 	</body>
 </html>
