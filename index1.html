@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			body ul{margin:0;padding:0;}
+			li{list-style:none;}
+			a{text-decoration: none;font-size:30px;padding:5px;}
+			.show{background:orange;}
+			#loading{
+	           width: 100%;
+	           text-align: center;
+	           display:none;
+	        }
+	        #title {
+            	text-align: right;
+	        }
+	        #title span {
+	            margin-left: 20px;
+	        }
+		</style>
+	</head>
+	<body>
+		<img src="3.png" alt="" />
+		<input type="text"  id="p" placeholder="书籍 电影 音乐 其他"/>
+		<input type="button" id="btn" value="搜索" />
+		<div id="title">
+			<!--<span>1</span>
+			<span>2</span>
+			<span>3</span>-->
+		</div>
+		<hr />
+		<div id="loading">加载中.......</div>
+		<ul id="list">
+	        <!--<li>
+	            <img src="http://img3.douban.com/mpic/s3400022.jpg" class="fl"/>
+	            <div class="fl">
+	                <p>JavaScript : The Good Parts</p>
+	                <p>克罗克福特 / 东南大学出版社 / 2009-1 / 28.00元</p>
+	                <p>9.1 (60人评价)</p>
+	                <p>纸质版 22.40 元起</p>
+	            </div>
+	        </li>-->
+	        <div id="page">
+		        <a href="">上一页</a>
+		        <a href="" class="show">1</a>
+		        <a href="">2</a>
+		        <a href="">3</a>
+		        <a href="">4</a>
+		        <a href="">下一页</a>
+	    	</div>
+   		</ul>
+    	<script type="text/javascript">
+    		function fn(data){
+    			
+    		}
+    		function createTag(){
+				var oP = document.getElementById("p");
+				var oBtn = document.getElementById("btn");
+				if(oP.value != ''){
+				  	var oScript = document.createElement('script');
+				  	oScript.src = 'https://api.douban.com/v2/book/search?q='+oP.value+'&callback=fn&start='+(hash-1)*10+1;
+					document.body.appendChild(oScript);
+				}
+    		}
+    		
+    	</script>
+	</body>
+</html>
